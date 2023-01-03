@@ -20,18 +20,12 @@ class ResultScreen extends GetView<ResultController> {
               "Your BMI SCORE",
               style: Theme.of(context).textTheme.headline4,
             ),
-            Text(
-              controller.bmi.toString(),
-              style: Theme.of(context)
-                  .textTheme
-                  .headline3!
-                  .copyWith(color: Colors.red),
-            ),
-            Text("controller.getResult(controller.bmi),",
+            
+            Text(controller.bmi.runtimeType!=Null? controller.bmi.toStringAsFixed(2):"Null value",
                 style: Theme.of(context).textTheme.headline5!),
             Padding(
               padding: const EdgeInsets.all(13.0),
-              child: Text("controller.getInfo(controller.bmi),",
+              child: Text(controller.resultData.toString(),
                   style: Theme.of(context).textTheme.headline6!),
             ),
             TextButton(

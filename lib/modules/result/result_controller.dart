@@ -6,7 +6,9 @@ import 'package:get/get.dart';
 
 class ResultController extends GetxController {
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  double? bmi = 30;
+  RxDouble bmi = 0.0.obs;
+  RxString resultData = "".obs;
+  RxString infoData = "".obs;
   HomeControlller homeControlller = HomeControlller();
   @override
   void onInit() async {
@@ -16,29 +18,18 @@ class ResultController extends GetxController {
         .collection("data")
         .get();
 
-    var x = fireData.docs.last["weight"];
-    var y = fireData.docs.last["height"];
-    print(x + " " + y);
+    var height = double.parse(fireData.docs.last["height"]) / 100;
+    var weight = double.parse(fireData.docs.last["weight"]);
 
-    // bmi = (x / (pow(2, y / 100)));
-    // print(bmi);
-    // print(bmi.runtimeType);
-    // print((x + y));
-    // // bmi = double.tryParse(x + y);
-    // print(x + y);
+    bmi.value = weight / (height * height);
+
+    resultData = getResult(bmi);
+    infoData = getInfo(bmi);
+
     super.onInit();
   }
 
-  // getLastData() async {
-  //   // print(fireData.docs[4].data()["weight"]);
-  // }
-
-  // double? result(double weight, double height) {
-  //   bmi = weight / (pow(2, height / 100));
-  //   return bmi;
-  // }
-
-  getResult(bmi) async {
+  getResult(bmi) {
     if (bmi! < 18.50) {
       return ("AŞIRI ZAYIF");
     } else if (bmi! >= 18.50 && bmi! <= 24.90) {
@@ -52,7 +43,7 @@ class ResultController extends GetxController {
     }
   }
 
-  getInfo(bmi) async {
+  getInfo(bmi) {
     if (bmi! < 18.50) {
       return ("Aşırı Zayıfsınız Yemek Yemelisin");
     } else if (bmi! >= 18.50 && bmi! <= 24.90) {
